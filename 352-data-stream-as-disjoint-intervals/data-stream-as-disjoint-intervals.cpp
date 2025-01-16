@@ -1,17 +1,16 @@
 class SummaryRanges {
 public:
-    unordered_set<int>st;
+    set<int>st;
     SummaryRanges() {
         st.clear();
     }
     
     void addNum(int value) {
-        st.insert(value);
+        st.insert(value); // log(n)
     }
     
     vector<vector<int>> getIntervals() {
         vector<int>nums(st.begin(),st.end());
-        sort(nums.begin(),nums.end());
         int n=st.size();
         vector<vector<int>> result;
         for(int i=0;i<n;i++){
