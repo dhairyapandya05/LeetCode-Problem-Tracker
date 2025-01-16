@@ -1,25 +1,38 @@
 class SummaryRanges {
 public:
-    set<int>st;
+    map<int,int>mp;
     SummaryRanges() {
-        st.clear();
+        mp.clear();
     }
     
     void addNum(int value) {
-        st.insert(value); // log(n)
+        int left=value;
+        int right=value;
+        auto justbada=mp.upper_bound(value);
+        if(justbada!=mp.begin()){
+            auto just_peechae=justbada;
+            just_peechae--;
+            if(just_peechae->second>=value) {
+                return;
+            }
+            if(just_peechae->second==value-1) {
+                left=just_peechae->first;
+            }
+
+        }
+        if(justbada!=mp.end() and justbada->first==value+1){
+            right=justbada->second;
+            mp.erase(justbada);
+        }
+        mp[left]=right;
     }
     
     vector<vector<int>> getIntervals() {
-        vector<int>nums(st.begin(),st.end());
-        int n=st.size();
         vector<vector<int>> result;
-        for(int i=0;i<n;i++){
-            int left=nums[i];
-            while(i<n-1 and nums[i]+1 == nums[i+1]){
-                i++;
-            }
-            result.push_back({left,nums[i]});
+        for(auto& it:mp){
+            result.push_back({it.first,it.second});
         }
+
         return result;
     }
 };
