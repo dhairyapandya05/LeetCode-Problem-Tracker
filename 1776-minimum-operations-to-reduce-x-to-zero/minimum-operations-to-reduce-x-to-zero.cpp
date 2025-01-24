@@ -17,6 +17,7 @@ public:
         for (int i = 0; i < n; i++) {
             sum+=nums[i];
             int tofind =  sum-target;
+            if(tofind<0)continue;// this is the op
             if (mp.find(tofind) != mp.end()) {
                 int temp = i - mp[tofind];
                 maxans = max(maxans, temp);
