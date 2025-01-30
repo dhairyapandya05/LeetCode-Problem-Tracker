@@ -4,13 +4,15 @@ public:
         int n=matrix.size();
         int m=matrix[0].size();
         int maxArea=0;
+        vector<int>prevHeights(m,0);
         for(int i=0;i<n;i++){
+            vector<int>currHeights=matrix[i];
             for(int j=0;j<m;j++){
-                if(matrix[i][j]==1 and i>0){
-                    matrix[i][j]+=matrix[i-1][j];
+                if(currHeights[j]==1){
+                    currHeights[j]+=prevHeights[j];
                 }
             }
-            vector<int>heights=matrix[i];
+            vector<int>heights=currHeights;
             sort(heights.begin(),heights.end(),greater<int>());
             for(int i=0;i<m;i++){
                 int height=heights[i];
@@ -18,6 +20,7 @@ public:
                 int area=height*width;
                 maxArea=max(maxArea,area);
             }
+            prevHeights=currHeights;
         }
         return maxArea;
     }
