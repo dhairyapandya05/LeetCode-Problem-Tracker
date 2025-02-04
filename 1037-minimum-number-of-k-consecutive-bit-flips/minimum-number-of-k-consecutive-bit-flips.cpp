@@ -5,9 +5,9 @@ public:
         int n=nums.size();
         int flips=0;
         int flipcountfrompastfori=0;
-        vector<bool> isFlipped(n,false);
+        // vector<bool> isFlipped(n,false);
         for(int i=0;i<n;i++){
-            if(i-k>=0 and isFlipped[i-k]==true){ // abhi isFlipped[i-k] valla ith index par impack nahi bana raha hoga to usko minus karaegae
+            if(i-k>=0 and nums[i-k]==-1){ // abhi isFlipped[i-k] valla ith index par impack nahi bana raha hoga to usko minus karaegae
                 flipcountfrompastfori--;
             }
             if(flipcountfrompastfori%2==nums[i]){
@@ -16,7 +16,8 @@ public:
 
                 flipcountfrompastfori++;
                 flips++;
-                isFlipped[i]=true;
+                // isFlipped[i]=true;
+                nums[i]=-1;
             }
         }  
         return flips;
