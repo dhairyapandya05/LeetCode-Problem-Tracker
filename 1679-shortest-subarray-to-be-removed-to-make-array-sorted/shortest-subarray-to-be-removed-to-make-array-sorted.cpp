@@ -4,13 +4,10 @@ public:
         int n = arr.size();
         
         // Step 1: Find `j`, the start of the non-decreasing suffix
-        // int j = n - 1;
-        // while (j > 0 && arr[j] >= arr[j - 1]) j--;
-
         int j = n - 1;
-for (; j >= 1; j--) {
-    if (arr[j] < arr[j - 1]) break;
-}
+        while (j > 0 && arr[j] >= arr[j - 1]) j--;
+
+
         
         // If the whole array is already sorted, no removal needed
         if (j == 0) return 0;
