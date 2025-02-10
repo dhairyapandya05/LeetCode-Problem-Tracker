@@ -8,13 +8,13 @@ public:
         }
 
         sort(intervals.begin(),intervals.end());
-        deque<pair<int,int>>de;
+        deque<int>de;
         int maxBeauty=0;
         for(int i=0;i<n;i++){
-            while(!de.empty() and de.front().second<intervals[i].first){
+            while(!de.empty() and de.front()<intervals[i].first){
                 de.pop_front();
             }
-            de.push_back(intervals[i]);
+            de.push_back(intervals[i].second);
             maxBeauty=max(maxBeauty,(int)de.size());
         }
         return maxBeauty;
