@@ -2,21 +2,24 @@ class Solution {
 public:
     vector<bool> isArraySpecial(vector<int>& nums, vector<vector<int>>& queries) {
         int n = nums.size();
+        vector<int> validRightMostIdx(n,0);
         int m=queries.size();
-        vector<int> cumsum(n, 0);
-        for(int i=1;i<n;i++){
-            if(nums[i]%2==nums[i-1]%2){
-                cumsum[i]=cumsum[i-1]+1;
+        int i=0,j=0;
+        while(i<n){
+            if(j<i){    // safety cheque
+                j=i;
             }
-            else{
-                cumsum[i]=cumsum[i-1];
+            while(j+1<n and nums[j]%2!=nums[j+1]%2){
+                j++;
             }
+            validRightMostIdx[i]=j; 
+            i++;
         }
         vector<bool>result(m,false);
         for(int i=0;i<m;i++){
             int start=queries[i][0];
             int end=queries[i][1];
-            if(cumsum[end]-cumsum[start]==0){
+            if(end<=validRightMostIdx[start]){
                 result[i]=true;
             }
         }
