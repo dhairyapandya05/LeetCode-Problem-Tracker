@@ -2,13 +2,11 @@ class Solution {
 public:
     int maxChunksToSorted(vector<int>& nums) {
         int n=nums.size();
-        int cumSum=0,origSum=0,chunks=0;
+        int chunks=0;
+        int maxTillNow=-1;
         for(int i=0;i<n;i++){
-            cumSum+=nums[i];
-            origSum+=i;
-            if(origSum==cumSum){
-                chunks++;
-            }
+            maxTillNow=max(maxTillNow,nums[i]);
+            if(maxTillNow==i) chunks++;
         }
         return chunks;
     }
