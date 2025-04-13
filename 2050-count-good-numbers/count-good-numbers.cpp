@@ -1,16 +1,18 @@
 class Solution {
 public:
-    long long modPow(long long x, long long n, int mod) {
+    long long modPow(long long x, long long n, int MOD) {
+        x=x%MOD;
+        long long N = n; // Avoid overflow for INT_MIN case
         long long ans = 1;
-        x = x % mod;
 
-        while (n > 0) {
-            if (n % 2 == 1) {
-                ans = (ans * x) % mod;
+        while (N) {
+            if (N % 2) { // If `N` is odd
+                ans = (ans * x) % MOD;
             }
-            x = (x * x) % mod;
-            n /= 2;
+            x = (x * x) % MOD; // Square `x`
+            N /= 2;            // Halve `N`
         }
+
         return ans;
     }
 
@@ -19,7 +21,9 @@ public:
         long long even_positions = (n + 1) / 2;
         long long odd_positions = n / 2;
 
-        long long res = (modPow(5, even_positions, MOD) * modPow(4, odd_positions, MOD)) % MOD;
+        long long res =
+            (modPow(5, even_positions, MOD) * modPow(4, odd_positions, MOD)) %
+            MOD;
         return (int)res;
     }
 };
