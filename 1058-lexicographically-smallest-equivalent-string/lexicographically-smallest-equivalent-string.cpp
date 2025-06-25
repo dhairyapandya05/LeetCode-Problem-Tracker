@@ -1,57 +1,46 @@
-class DisjointSet
-{    
-public: 
-    vector<int> parent;
-    vector<int> rank;
-
-    DisjointSet()
-    {
-        parent.assign(26, -1);
-        rank.assign(26, 0);
-    }
-
-    int findUp(int u)
-    {
-        if(parent[u] == -1) return u;
-        return parent[u] = findUp(parent[u]);
-    }
-
-    void unionByRank(char u, char v)
-    {
-        int uU = findUp(u - 'a');
-        int vV = findUp(v - 'a');
-        if(uU == vV) return;
-
-        if(uU < vV)   // Always keep lex smaller as parent
-        {
-            parent[vV] = uU;
-        }
-        else
-        {
-            parent[uU] = vV;
-        }
-    }
-
-    char findMini(char ch)
-    {
-        return findUp(ch - 'a') + 'a';
-    }
-};
-
 class Solution {
 public:
+    class Dsu {
+        public:
+        vector<int> parent;
+        vector<int> rank;
+        Dsu() {
+            parent.resize(26, -1);
+            rank.resize(26, 0);
+            for (int i = 0; i < 26; i++) {
+                parent[i] = i;
+            }
+        }
+        int Find(int u) {
+            if (parent[u] == u)
+                return u;
+            return parent[u] = Find(parent[u]);
+        }
+        void Union(int u, int v) {
+            int parentU = Find(u);
+            int parentV = Find(v);
+            if (parentU == parentV)
+                return;
+            if (parentU > parentV)
+                parent[parentU] = parentV;
+            else if (parentU < parentV)
+                parent[parentV] = parentU;
+            else {
+                parent[parentU] = parentU;
+                rank[parentU]++;
+            }
+        }
+    };
     string smallestEquivalentString(string s1, string s2, string baseStr) {
-        DisjointSet ds;
-        for(int i = 0; i < s1.length(); i++)
-        {
-            ds.unionByRank(s1[i], s2[i]);
+        int n = s1.length();
+        Dsu d;
+        for (int i = 0; i < n; i++) {
+            d.Union(s1[i] - 'a', s2[i] - 'a');
         }
-
-        string res;
-        for(char ch : baseStr)
-        {
-            res += ds.findMini(ch);
+        string ans;
+        for (auto it : baseStr) {
+            ans += char(d.Find(it-'a')+'a');
         }
-        return res;
+        return ans;
     }
 };
