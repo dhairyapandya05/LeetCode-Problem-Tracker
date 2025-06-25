@@ -1,33 +1,49 @@
 class Solution {
 public:
-    void getDistances(int start, const vector<int>& edges, vector<int>& dist) {
-        int d = 0;
-        while (start != -1 && dist[start] == -1) {
-            dist[start] = d++;
-            start = edges[start];
-        }
-    }
-
     int closestMeetingNode(vector<int>& edges, int node1, int node2) {
-        int n = edges.size();
-        vector<int> dist1(n, -1), dist2(n, -1);
-
-        getDistances(node1, edges, dist1);
-        getDistances(node2, edges, dist2);
-
-        int minDist = INT_MAX;
-        int result = -1;
-
-        for (int i = 0; i < n; ++i) {
-            if (dist1[i] != -1 && dist2[i] != -1) {
-                int maxDist = max(dist1[i], dist2[i]);
-                if (maxDist < minDist ) {
-                    minDist = maxDist;
-                    result = i;
+        queue<int> q1;
+        queue<int> q2;
+        q1.push(node1);
+        set<int>s1;
+        set<int>s2;
+        s1.insert(node1);
+        s2.insert(node2);
+        q2.push(node2);
+        int level=0;
+        int count=0;
+        while (!q1.empty() and !q2.empty()) {
+            int N = max(q1.size(), q2.size());
+            if(count>=100000) return -1;
+            while (N--) {
+                count++;
+                auto temp1 = q1.front();
+                q1.pop();
+                auto temp2 = q2.front();
+                q2.pop();
+                s1.insert(temp1);
+                s2.insert(temp2);
+                if(temp1<temp2){
+if(s2.find(temp1)!=s2.end()) return temp1;
+if(s1.find(temp2)!=s1.end()) return temp2;
                 }
-            }
-        }
+                else{
+if(s1.find(temp2)!=s1.end()) return temp2;
 
-        return result;
+if(s2.find(temp1)!=s2.end()) return temp1;
+                }
+                
+                
+                if (edges[temp1] == -1)
+                    q1.push(temp1);
+                else
+                    q1.push(edges[temp1]);
+                if (edges[temp2] == -1)
+                    q2.push(temp2);
+                else
+                    q2.push(edges[temp2]);
+            }
+            level++;
+        }
+        return -1;
     }
 };
