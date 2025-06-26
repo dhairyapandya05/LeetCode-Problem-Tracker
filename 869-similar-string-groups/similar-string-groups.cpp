@@ -1,5 +1,7 @@
 class Solution {
 public:
+    vector<int> parent;
+    vector<int> rank;
     bool isSimilar(string s, string t){
         if(s.length()!=t.length()) return false;
         int diff=0;
@@ -9,18 +11,40 @@ public:
         }
         return diff==0 or diff==2;
     }
-    void dfs(int node,vector<bool>& visited, unordered_map<int,vector<int>>& mp){
-        visited[node]=true;
-        for(auto it:mp[node]){
-            if(!visited[it]){
-                dfs(it,visited,mp);
+
+    
+    int find(int i){
+        if(parent[i]==i){
+            return i;
+        }
+        return parent[i]=find(parent[i]);
+    }
+    
+    void unionSets(int u,int v){
+        int x_parent=find(u);
+        int y_parent=find(v);
+        if(x_parent!=y_parent){
+            if(rank[x_parent] > rank[y_parent]){
+                parent[y_parent]=x_parent;
+            }
+            else if(rank[x_parent] < rank[y_parent]){
+                parent[x_parent]=y_parent;
+            }
+            else{
+                parent[x_parent]=y_parent;
+                rank[y_parent]++;
             }
         }
     }
     int numSimilarGroups(vector<string>& strs) {
         unordered_map<int,vector<int>>adj;
         int n=strs.size();
+        parent.resize(n);
+        rank.resize(n,0);
         for(int i=0;i<n;i++){
+            parent[i]=i;
+        }
+        for(int i=0;i<n;i++){ 
             for(int j=i+1;j<n;j++){
                 if(isSimilar(strs[i], strs[j])){
                     adj[j].push_back(i);
@@ -28,17 +52,19 @@ public:
                 }
             }
         }
+        int groups=n;
         vector<bool>visited(n,false);
-        int count=0;
         for(int i=0;i<n;i++){
-            if(!visited[i]){
-                count++;
-                dfs(i,visited,adj);
+            for(int j=i+1;j<n;j++){
+                if(isSimilar(strs[i],strs[j]) and find(i)!=find(j)){
+                    unionSets(i,j);
+                    groups--;
+                }
             }
         }
 
 
 
-        return count;
+        return groups;
     }
 };
