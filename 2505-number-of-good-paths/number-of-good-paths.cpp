@@ -47,11 +47,11 @@ public:
             int val=nd.first;
             vector<int> nodes=nd.second;
             for(auto u:nodes){
+                isActive[u]=true;
                 for(int v:mp[u]){
                     if(isActive[v])
                     Union(u,v);
                 }
-                isActive[u]=true;
             }
             unordered_map<int,int> parentmp; //parent, freq
             for(auto u:nodes){
