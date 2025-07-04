@@ -60,7 +60,7 @@ public:
             }
             for(auto it:parentmp){
                 int count=it.second;
-                result+=(count*(count-1))/2;
+                result+=((count*(count-1))>>1);
             }
         }
         return result;
